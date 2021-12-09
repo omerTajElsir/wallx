@@ -26,6 +26,8 @@ Widget wallPaper(List<PhotosModel> listPhotos, BuildContext context) {
                   MaterialPageRoute(
                       builder: (context) => ImageView(
                             imgPath: photoModel.src.portrait,
+                            photographer: photoModel.photographer,
+                            photographerURL: photoModel.photographerUrl,
                           )));
             },
             child: Hero(

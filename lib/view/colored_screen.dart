@@ -21,7 +21,7 @@ class _ColoredScreenState extends State<ColoredScreen> {
   getCategorieWallpaper() async {
     await http.get(
         Uri.parse(
-            "https://api.pexels.com/v1/search?query=${widget.color}&per_page=30&page=1"),
+            "https://api.pexels.com/v1/search?query=${widget.color}&per_page=60&page=1"),
         headers: {"Authorization": apiKEY}).then((value) {
       //print(value.body);
 

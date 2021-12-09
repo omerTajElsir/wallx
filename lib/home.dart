@@ -109,6 +109,19 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: TextField(
                         controller: searchController,
+                        onSubmitted: (value) {
+                          if (searchController.text != "") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchView(
+                                  search: searchController.text,
+                                ),
+                              ),
+                            );
+                            //searchController.clear();
+                          }
+                        },
                         decoration: InputDecoration(
                             hintText: "search wallpapers",
                             border: InputBorder.none),
@@ -125,6 +138,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             );
+                            //searchController.clear();
                           }
                         },
                         child: Container(child: Icon(Icons.search)))

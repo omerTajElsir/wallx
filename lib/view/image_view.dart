@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,8 +15,13 @@ import 'package:wallpaper/wallpaper.dart';
 
 class ImageView extends StatefulWidget {
   final String imgPath;
+  final String photographer;
+  final String photographerURL;
 
-  ImageView({@required this.imgPath});
+  ImageView(
+      {@required this.imgPath,
+      @required this.photographer,
+      @required this.photographerURL});
 
   @override
   _ImageViewState createState() => _ImageViewState();
@@ -24,7 +30,7 @@ class ImageView extends StatefulWidget {
 class _ImageViewState extends State<ImageView> {
   var filePath;
 
-  bool isFavorite = false;
+  bool isFavorite = false, isDownloading = false, isSetting = false;
 
   _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -72,33 +78,82 @@ class _ImageViewState extends State<ImageView> {
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.bottomCenter,
             child: Padding(
+              padding: const EdgeInsets.only(bottom: 100),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        height: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colors.black38),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Photo by : ",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontFamily: 'Overpass'),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _launchURL(widget.photographerURL);
+                              },
+                              child: Container(
+                                  child: Text(
+                                widget.photographer,
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14,
+                                    fontFamily: 'Overpass'),
+                              )),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            alignment: Alignment.bottomCenter,
+            child: Padding(
               padding: const EdgeInsets.only(bottom: 40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      print("test");
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_outline,
-                        color: isFavorite ? Colors.red : Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     print("test");
+                  //     setState(() {
+                  //       isFavorite = !isFavorite;
+                  //     });
+                  //   },
+                  //   child: Container(
+                  //     width: 50,
+                  //     height: 50,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.black26,
+                  //       borderRadius: BorderRadius.circular(40),
+                  //     ),
+                  //     child: Icon(
+                  //       isFavorite ? Icons.favorite : Icons.favorite_outline,
+                  //       color: isFavorite ? Colors.red : Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   width: 20,
+                  // ),
                   InkWell(
                     onTap: () {
                       if (kIsWeb) {
@@ -116,10 +171,17 @@ class _ImageViewState extends State<ImageView> {
                         color: Colors.black26,
                         borderRadius: BorderRadius.circular(40),
                       ),
-                      child: Icon(
-                        Icons.download,
-                        color: Colors.white,
-                      ),
+                      child: isDownloading
+                          ? Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : Icon(
+                              Icons.download,
+                              color: Colors.white,
+                            ),
                     ),
                   ),
                   SizedBox(
@@ -200,13 +262,21 @@ class _ImageViewState extends State<ImageView> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(40),
                                   color: Colors.purple),
-                              child: Text(
-                                "Apply",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              )),
+                              child: downloading
+                                  ? SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Apply",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    )),
                         ],
                       )),
                 ],
@@ -249,15 +319,26 @@ class _ImageViewState extends State<ImageView> {
   }
 
   _save() async {
+    setState(() {
+      isDownloading = true;
+    });
     await _askPermission();
     var response = await Dio().get(widget.imgPath,
         options: Options(responseType: ResponseType.bytes));
     final result =
         await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
     print(result);
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Image Saved")));
-    Navigator.pop(context);
+    setState(() {
+      isDownloading = false;
+    });
+    Fluttertoast.showToast(
+        msg: "Image Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   _askPermission() async {
@@ -298,8 +379,14 @@ class _ImageViewState extends State<ImageView> {
         both = both;
       });
       print("Set");
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Image Set as background")));
+      Fluttertoast.showToast(
+          msg: "Background Changed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }, onError: (error) {
       setState(() {
         downloading = false;

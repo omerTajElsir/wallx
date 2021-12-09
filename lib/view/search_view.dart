@@ -21,13 +21,17 @@ class _SearchViewState extends State<SearchView> {
   TextEditingController searchController = new TextEditingController();
 
   getSearchWallpaper(String searchQuery) async {
+    setState(() {
+      photos = [];
+    });
     await http.get(
         Uri.parse(
-            "https://api.pexels.com/v1/search?query=$searchQuery&per_page=30&page=1"),
+            "https://api.pexels.com/v1/search?query=$searchQuery&per_page=60&page=1"),
         headers: {"Authorization": apiKEY}).then((value) {
       //print(value.body);
 
       Map<String, dynamic> jsonData = jsonDecode(value.body);
+
       jsonData["photos"].forEach((element) {
         //print(element);
         PhotosModel photosModel = new PhotosModel();
@@ -60,41 +64,54 @@ class _SearchViewState extends State<SearchView> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 16,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xfff5f8fd),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 24),
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
+          child: photos.length == 0
+              ? Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ),
+                )
+              : Column(
                   children: <Widget>[
-                    Expanded(
-                        child: TextField(
-                      controller: searchController,
-                      decoration: InputDecoration(
-                          hintText: "search wallpapers",
-                          border: InputBorder.none),
-                    )),
-                    InkWell(
-                        onTap: () {
-                          getSearchWallpaper(searchController.text);
-                        },
-                        child: Container(child: Icon(Icons.search)))
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xfff5f8fd),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: 24),
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                                hintText: "search wallpapers",
+                                border: InputBorder.none),
+                          )),
+                          InkWell(
+                              onTap: () {
+                                getSearchWallpaper(searchController.text);
+                              },
+                              child: Container(child: Icon(Icons.search)))
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    wallPaper(photos, context),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              wallPaper(photos, context),
-            ],
-          ),
         ),
       ),
     );
