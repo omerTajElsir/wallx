@@ -21,7 +21,7 @@ class _ColoredScreenState extends State<ColoredScreen> {
   getCategorieWallpaper() async {
     await http.get(
         Uri.parse(
-            "https://api.pexels.com/v1/search?query=${widget.color}&per_page=60&page=1"),
+            "https://api.pexels.com/v1/search?query=${widget.color}&per_page=60&page=1&size=large"),
         headers: {"Authorization": apiKEY}).then((value) {
       //print(value.body);
 
@@ -70,7 +70,20 @@ class _ColoredScreenState extends State<ColoredScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            wallPaper(photos, context),
+            photos.length == 0
+                ? Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(
+                          color: Colors.purple,
+                        ),
+                      ),
+                    ),
+                  )
+                : wallPaper(photos, context),
           ],
         )),
       ),

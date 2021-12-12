@@ -26,7 +26,7 @@ class _SearchViewState extends State<SearchView> {
     });
     await http.get(
         Uri.parse(
-            "https://api.pexels.com/v1/search?query=$searchQuery&per_page=60&page=1"),
+            "https://api.pexels.com/v1/search?query=$searchQuery&per_page=60&page=1&size=large"),
         headers: {"Authorization": apiKEY}).then((value) {
       //print(value.body);
 

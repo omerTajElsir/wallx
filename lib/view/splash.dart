@@ -74,6 +74,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
                   PageTransition(type: PageTransitionType.fade, child: Home()));
             }
           });
+
     _scaleController.forward();
   }
 

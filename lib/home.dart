@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   getTrendingWallpaper() async {
     await http.get(
         Uri.parse(
-            "https://api.pexels.com/v1/curated?per_page=$noOfImageToLoad&page=1"),
+            "https://api.pexels.com/v1/curated?per_page=$noOfImageToLoad&page=1&size=large"),
         headers: {"Authorization": apiKEY}).then((value) {
       //print(value.body);
 
@@ -232,7 +232,21 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 10,
               ),
-              wallPaper(photos, context),
+              photos.length > 0
+                  ? wallPaper(photos, context)
+                  : Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: CircularProgressIndicator(
+                            color: Colors.purple,
+                          ),
+                        ),
+                      ),
+                    ),
               SizedBox(
                 height: 24,
               ),
@@ -379,11 +393,13 @@ class ColorsTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ColoredScreen(
-                      color: name,
-                    )));
+          context,
+          MaterialPageRoute(
+            builder: (context) => ColoredScreen(
+              color: name,
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(right: 8),
