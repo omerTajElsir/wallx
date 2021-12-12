@@ -20,6 +20,10 @@ This is an open source wallpaper app developed using flutter for displaying, dow
 - Set image as home screen or lock screen or both
 - Showing high quality images with fast loading time using image caching
 
+
+![This is an image](/screenshots/splash.png)
+![This is an image](/screenshots/video.gif)
+
 ## To-Do
 
 - signup to pixels.com and get a free API key and paste it at data.dart folder
