@@ -21,14 +21,14 @@ This is an open source wallpaper app developed using flutter for displaying, dow
 - Showing high quality images with fast loading time using image caching
 
 <p float="left">
-<img src="/screenshots/video.gif" width="100"  >
-<img src="/screenshots/splash.png" width="100"  >
-<img src="/screenshots/home.png" width="100"  >
-<img src="/screenshots/image.png" width="100"  >
-<img src="/screenshots/actions.png" width="100"  >
-<img src="/screenshots/search.png" width="100"  >
-<img src="/screenshots/color.png" width="100"  >
-<img src="/screenshots/category.png" width="100"  >
+<img src="/screenshots/video.gif" width=" 150"  >
+<img src="/screenshots/splash.png" width=" 150"  >
+<img src="/screenshots/home.png" width=" 150"  >
+<img src="/screenshots/image.png" width=" 150"  >
+<img src="/screenshots/actions.png" width=" 150"  >
+<img src="/screenshots/search.png" width=" 150"  >
+<img src="/screenshots/color.png" width=" 150"  >
+<img src="/screenshots/category.png" width=" 150"  >
 </p>
 
 
