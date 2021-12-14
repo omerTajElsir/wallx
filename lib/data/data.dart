@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/categorie_model.dart';
 import '../models/colors_model.dart';
 
-/// Login to pixels.cpm and create ypur free API key
+/// Login to https://www.pexels.com and create your free API key
 String apiKEY = "YOUR API KEY HERE";
 
 List<CategorieModel> getCategories() {
