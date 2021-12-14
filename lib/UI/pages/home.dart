@@ -3,16 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wallx/UI/pages/search_view.dart';
 import 'dart:convert';
 
-import 'data/data.dart';
-import 'models/categorie_model.dart';
-import 'models/colors_model.dart';
-import 'models/photos_model.dart';
-import 'view/categorie_screen.dart';
-import 'view/colored_screen.dart';
-import 'view/search_view.dart';
-import 'widget/widget.dart';
+import '../../data/data.dart';
+import '../../models/categorie_model.dart';
+import '../../models/colors_model.dart';
+import '../../models/photos_model.dart';
+import '../widgets/categories_tile.dart';
+import '../widgets/colors_tile.dart';
+import '../widgets/common.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -280,154 +280,6 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CategoriesTile extends StatelessWidget {
-  final String imgUrls, categorie;
-
-  CategoriesTile({@required this.imgUrls, @required this.categorie});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CategorieScreen(
-                      categorie: categorie,
-                    )));
-      },
-      child: Container(
-        margin: EdgeInsets.only(right: 8),
-        child: kIsWeb
-            ? Column(
-                children: <Widget>[
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: kIsWeb
-                          ? Image.network(
-                              imgUrls,
-                              height: 50,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: imgUrls,
-                              height: 50,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            )),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                      width: 100,
-                      alignment: Alignment.center,
-                      child: Text(
-                        categorie,
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Overpass'),
-                      )),
-                ],
-              )
-            : Stack(
-                children: <Widget>[
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: kIsWeb
-                          ? Image.network(
-                              imgUrls,
-                              height: 50,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: imgUrls,
-                              height: 50,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            )),
-                  Container(
-                    height: 50,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  Container(
-                      height: 50,
-                      width: 100,
-                      alignment: Alignment.center,
-                      child: Text(
-                        categorie ?? "Yo Yo",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Overpass'),
-                      ))
-                ],
-              ),
-      ),
-    );
-  }
-}
-
-class ColorsTile extends StatelessWidget {
-  final String name;
-  final Color color;
-
-  ColorsTile({@required this.color, @required this.name});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ColoredScreen(
-              color: name,
-            ),
-          ),
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.only(right: 8),
-        child: Column(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: LinearGradient(
-                    colors: [color, color.withOpacity(0.65)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomCenter),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 7.0,
-                    offset: Offset(0, 5),
-                    spreadRadius: 0.5,
-                  ),
-                ],
-              ),
-              width: 100,
-              height: 50,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-          ],
         ),
       ),
     );

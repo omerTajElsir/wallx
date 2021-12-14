@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../models/photos_model.dart';
-import '../view/image_view.dart';
+import '../../models/photos_model.dart';
+import '../pages/image_view.dart';
 
 Widget wallPaper(List<PhotosModel> listPhotos, BuildContext context) {
   return Container(

@@ -2,26 +2,26 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../data/data.dart';
-import '../models/photos_model.dart';
-import '../widget/widget.dart';
+import '../../data/data.dart';
+import '../../models/photos_model.dart';
+import '../widgets/common.dart';
 
-class CategorieScreen extends StatefulWidget {
-  final String categorie;
+class ColoredScreen extends StatefulWidget {
+  final String color;
 
-  CategorieScreen({@required this.categorie});
+  ColoredScreen({@required this.color});
 
   @override
-  _CategorieScreenState createState() => _CategorieScreenState();
+  _ColoredScreenState createState() => _ColoredScreenState();
 }
 
-class _CategorieScreenState extends State<CategorieScreen> {
+class _ColoredScreenState extends State<ColoredScreen> {
   List<PhotosModel> photos = new List();
 
   getCategorieWallpaper() async {
     await http.get(
         Uri.parse(
-            "https://api.pexels.com/v1/search?query=${widget.categorie}&per_page=60&page=1&size=large"),
+            "https://api.pexels.com/v1/search?query=${widget.color}&per_page=60&page=1&size=large"),
         headers: {"Authorization": apiKEY}).then((value) {
       //print(value.body);
 
@@ -62,7 +62,7 @@ class _CategorieScreenState extends State<CategorieScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 25, top: 20, bottom: 20),
               child: Text(
-                widget.categorie,
+                widget.color,
                 style: TextStyle(
                     color: Colors.black87,
                     fontFamily: 'Overpass',
